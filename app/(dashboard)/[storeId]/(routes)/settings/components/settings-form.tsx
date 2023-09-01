@@ -60,6 +60,23 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     }
   };
 
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/stores/${parmas.storeId}`);
+      router.refresh();
+      router.push("/");
+      toast.success("Store deleted.");
+    } catch (error) {
+      toast.error(
+        "Make sure you removed all the products and categories first.",
+      );
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
+  };
+
   return (
     <>
       <AlertModal
