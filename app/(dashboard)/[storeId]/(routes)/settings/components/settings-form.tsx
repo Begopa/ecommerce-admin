@@ -45,7 +45,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<SettingsForm>({
+  const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
   });
@@ -89,11 +89,14 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
         loading={loading}
       />
       <div className="flex items-center justify-between">
-        <Heading title="Settings" description="Manage store preferences" />
+        <Heading
+          title="Store settings"
+          description="Manage store preferences"
+        />
         <Button
           disabled={loading}
           variant="destructive"
-          size="icon"
+          size="sm"
           onClick={() => {
             setOpen(true);
           }}
@@ -128,7 +131,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
             />
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
-            Save Changes
+            Save changes
           </Button>
         </form>
       </Form>
