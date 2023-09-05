@@ -23,7 +23,7 @@ import { AlertModal } from "@/components/modals/alert-modal";
 interface CellActionProps {
   data: BillboardColumn;
 }
-export const CellAction: React.FC<CellActiomProps> = ({ data }) => {
+export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
   const [loading, setLoading] = useState(false);

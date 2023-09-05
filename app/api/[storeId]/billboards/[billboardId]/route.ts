@@ -46,7 +46,7 @@ export async function PATCH(
     }
 
     if (!params.billboardId) {
-      return new NextResponse("StoreId is required", { status: 400 });
+      return new NextResponse("Billboard id is required", { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -72,7 +72,7 @@ export async function PATCH(
     return NextResponse.json(billboard);
   } catch (error) {
     console.log("[BILLBOARD_PATCH]", error);
-    return new NextResponse("Interal error", { status: 500 });
+    return new NextResponse("Internal error", { status: 500 });
   }
 }
 
