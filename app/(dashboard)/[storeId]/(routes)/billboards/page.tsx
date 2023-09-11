@@ -2,10 +2,10 @@ import { format } from "date-fns";
 
 import prismadb from "@/lib/prismadb";
 
+import { BillboardColumn } from "./components/columns";
 import { BillboardClient } from "./components/client";
-import { BillboardColumn } from "@/app/(dashboard)/[storeId]/(routes)/billboards/components/columns";
 
-const BillboardPage = async ({ params }: { params: { storeId: string } }) => {
+const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
   const billboards = await prismadb.billboard.findMany({
     where: {
       storeId: params.storeId,
@@ -18,7 +18,7 @@ const BillboardPage = async ({ params }: { params: { storeId: string } }) => {
   const formattedBillboards: BillboardColumn[] = billboards.map((item) => ({
     id: item.id,
     label: item.label,
-    createdAt: format(item.createdAt, "MMM do, yyyy"),
+    createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
 
   return (
@@ -30,4 +30,4 @@ const BillboardPage = async ({ params }: { params: { storeId: string } }) => {
   );
 };
 
-export default BillboardPage;
+export default BillboardsPage;
