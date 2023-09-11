@@ -11,19 +11,20 @@ import { DataTable } from "@/components/ui/data-table";
 import { CategoryColumn, columns } from "./columns";
 import { ApiList } from "@/components/ui/api-list";
 
-interface CategoryClientProps {
+interface CategoriesClientProps {
   data: CategoryColumn[];
 }
 
-export const CategoryClient: React.FC<CategoryClientProps> = ({ data }) => {
-  const router = useRouter();
+export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
   const params = useParams();
+  const router = useRouter();
+
   return (
     <>
       <div className="flex items-center justify-between">
         <Heading
           title={`Categories (${data.length})`}
-          description="Manage Categories for your store"
+          description="Manage categories for your store"
         />
         <Button
           onClick={() => router.push(`/${params.storeId}/categories/new`)}
@@ -34,7 +35,7 @@ export const CategoryClient: React.FC<CategoryClientProps> = ({ data }) => {
       </div>
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
-      <Heading title="Api" description="API calls for Categores" />
+      <Heading title="API" description="API Calls for Categories" />
       <Separator />
       <ApiList entityName="categories" entityIdName="categoryId" />
     </>
