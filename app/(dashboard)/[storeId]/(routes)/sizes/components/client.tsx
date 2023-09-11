@@ -11,19 +11,20 @@ import { ApiList } from "@/components/ui/api-list";
 
 import { SizeColumn, columns } from "./columns";
 
-interface SizeClientProps {
+interface SizesClientProps {
   data: SizeColumn[];
 }
 
-export const SizeClient: React.FC<SizeClientProps> = ({ data }) => {
-  const router = useRouter();
+export const SizesClient: React.FC<SizesClientProps> = ({ data }) => {
   const params = useParams();
+  const router = useRouter();
+
   return (
     <>
       <div className="flex items-center justify-between">
         <Heading
           title={`Sizes (${data.length})`}
-          description="Manage sizes for your store"
+          description="Manage sizes for your products"
         />
         <Button onClick={() => router.push(`/${params.storeId}/sizes/new`)}>
           <Plus className="mr-2 h-4 w-4" />
@@ -32,7 +33,7 @@ export const SizeClient: React.FC<SizeClientProps> = ({ data }) => {
       </div>
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
-      <Heading title="Api" description="API calls for Sizes" />
+      <Heading title="API" description="API Calls for Sizes" />
       <Separator />
       <ApiList entityName="sizes" entityIdName="sizeId" />
     </>

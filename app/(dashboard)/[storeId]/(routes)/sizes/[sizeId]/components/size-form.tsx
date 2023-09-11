@@ -3,15 +3,15 @@
 import * as z from "zod";
 import axios from "axios";
 import { useState } from "react";
-import { Size } from "@prisma/client";
-import { Trash } from "lucide-react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+import { Trash } from "lucide-react";
+import { Size } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 
-import { Heading } from "@/components/ui/heading";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
@@ -20,8 +20,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import toast from "react-hot-toast";
+import { Separator } from "@/components/ui/separator";
+import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 const formSchema = z.object({
@@ -44,15 +44,14 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit size" : "Create size";
-  const description = initialData ? "Edit a size" : "Add a new size";
-  const toastMessage = initialData ? "Size updated" : "Size created";
+  const description = initialData ? "Edit a size." : "Add a new size";
+  const toastMessage = initialData ? "Size updated." : "Size created.";
   const action = initialData ? "Save changes" : "Create";
 
   const form = useForm<SizeFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: "",
-      value: "",
     },
   });
 
@@ -67,11 +66,10 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
       } else {
         await axios.post(`/api/${params.storeId}/sizes`, data);
       }
-
       router.refresh();
       router.push(`/${params.storeId}/sizes`);
       toast.success(toastMessage);
-    } catch (error) {
+    } catch (error: any) {
       toast.error("Something went wrong.");
     } finally {
       setLoading(false);
@@ -85,7 +83,7 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
       router.refresh();
       router.push(`/${params.storeId}/sizes`);
       toast.success("Size deleted.");
-    } catch (error) {
+    } catch (error: any) {
       toast.error("Make sure you removed all products using this size first.");
     } finally {
       setLoading(false);
@@ -107,10 +105,8 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
           <Button
             disabled={loading}
             variant="destructive"
-            size="icon"
-            onClick={() => {
-              setOpen(true);
-            }}
+            size="sm"
+            onClick={() => setOpen(true)}
           >
             <Trash className="h-4 w-4" />
           </Button>
