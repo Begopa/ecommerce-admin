@@ -11,13 +11,14 @@ import { ApiList } from "@/components/ui/api-list";
 
 import { ProductColumn, columns } from "./columns";
 
-interface ProductClientProps {
+interface ProductsClientProps {
   data: ProductColumn[];
 }
 
-export const ProductClient: React.FC<ProductClientProps> = ({ data }) => {
-  const router = useRouter();
+export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
   const params = useParams();
+  const router = useRouter();
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -32,7 +33,7 @@ export const ProductClient: React.FC<ProductClientProps> = ({ data }) => {
       </div>
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
-      <Heading title="Api" description="API calls for Products" />
+      <Heading title="API" description="API Calls for Products" />
       <Separator />
       <ApiList entityName="products" entityIdName="productId" />
     </>

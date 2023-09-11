@@ -3,11 +3,11 @@ import { format } from "date-fns";
 import prismadb from "@/lib/prismadb";
 import { formatterForUSD } from "@/lib/utils";
 
-import { ProductClient } from "./components/client";
+import { ProductsClient } from "./components/client";
 import { ProductColumn } from "./components/columns";
 
 const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
-  const prouducts = await prismadb.product.findMany({
+  const products = await prismadb.product.findMany({
     where: {
       storeId: params.storeId,
     },
@@ -21,7 +21,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
     },
   });
 
-  const formattedProducts: ProductColumn[] = prouducts.map((item) => ({
+  const formattedProducts: ProductColumn[] = products.map((item) => ({
     id: item.id,
     name: item.name,
     isFeatured: item.isFeatured,
@@ -30,13 +30,13 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
     category: item.category.name,
     size: item.size.name,
     color: item.color.value,
-    createdAt: format(item.createdAt, "MMM do, yyyy"),
+    createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
 
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <ProductClient data={formattedProducts} />
+        <ProductsClient data={formattedProducts} />
       </div>
     </div>
   );

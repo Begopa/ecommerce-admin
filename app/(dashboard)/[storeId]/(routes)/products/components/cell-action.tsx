@@ -1,11 +1,13 @@
 "use client";
 
 import axios from "axios";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
-import toast from "react-hot-toast";
+import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-
 import { useState } from "react";
+import { toast } from "react-hot-toast";
+
+import { AlertModal } from "@/components/modals/alert-modal";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,32 +16,31 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { className } from "postcss-selector-parser";
 import { ProductColumn } from "./columns";
-import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellActionProps {
-  data: ProuctColumn;
+  data: ProductColumn;
 }
+
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const router = useRouter();
-  const params = useParams();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const params = useParams();
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Product Id copied to the clipboard");
+    toast.success("Product ID copied to clipboard.");
   };
 
-  const onDelete = async () => {
+  const onConfirm = async () => {
     try {
       setLoading(true);
       await axios.delete(`/api/${params.storeId}/products/${data.id}`);
-      router.refresh();
       toast.success("Product deleted.");
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -53,7 +54,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={onDelete}
+        onConfirm={onConfirm}
         loading={loading}
       />
       <DropdownMenu>
@@ -66,8 +67,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onClick={() => onCopy(data.id)}>
-            <Edit className="mr-2 h-4 w-4" />
-            Copy Id
+            <Copy className="mr-2 h-4 w-4" /> Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
