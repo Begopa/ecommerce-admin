@@ -2,16 +2,16 @@
 
 import * as z from "zod";
 import axios from "axios";
-import { useState } from "react";
-import { Store } from "@prisma/client";
-import { Trash } from "lucide-react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+import { Trash } from "lucide-react";
+import { Store } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 
-import { Heading } from "@/components/ui/heading";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
@@ -20,8 +20,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import toast from "react-hot-toast";
+import { Separator } from "@/components/ui/separator";
+import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/modals/alert-modal";
 import { ApiAlert } from "@/components/ui/api-alert";
 import { useOrigin } from "@/hooks/use-origin";
@@ -31,7 +31,7 @@ interface SettingsFormProps {
 }
 
 const formSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(2),
 });
 
 // named for reuse
@@ -56,7 +56,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
       await axios.patch(`/api/stores/${params.storeId}`, data);
       router.refresh();
       toast.success("Store updated.");
-    } catch (error) {
+    } catch (error: any) {
       toast.error("Something went wrong.");
     } finally {
       setLoading(false);
@@ -70,10 +70,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
       router.refresh();
       router.push("/");
       toast.success("Store deleted.");
-    } catch (error) {
-      toast.error(
-        "Make sure you removed all the products and categories first.",
-      );
+    } catch (error: any) {
+      toast.error("Make sure you removed all products and categories first.");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -97,9 +95,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           disabled={loading}
           variant="destructive"
           size="sm"
-          onClick={() => {
-            setOpen(true);
-          }}
+          onClick={() => setOpen(true)}
         >
           <Trash className="h-4 w-4" />
         </Button>
@@ -110,7 +106,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <div className="md:grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
               name="name"
