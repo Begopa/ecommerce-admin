@@ -9,6 +9,7 @@ export async function POST(
 ) {
   try {
     const { userId } = auth();
+
     const body = await req.json();
 
     const {
@@ -23,7 +24,7 @@ export async function POST(
     } = body;
 
     if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 401 });
+      return new NextResponse("Unauthenticated", { status: 403 });
     }
 
     if (!name) {
@@ -62,7 +63,7 @@ export async function POST(
     });
 
     if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 403 });
+      return new NextResponse("Unauthorized", { status: 405 });
     }
 
     const product = await prismadb.product.create({
@@ -82,6 +83,7 @@ export async function POST(
         },
       },
     });
+
     return NextResponse.json(product);
   } catch (error) {
     console.log("[PRODUCTS_POST]", error);
@@ -101,7 +103,7 @@ export async function GET(
     const isFeatured = searchParams.get("isFeatured");
 
     if (!params.storeId) {
-      return new NextResponse("StoreId is required", { status: 400 });
+      return new NextResponse("Store id is required", { status: 400 });
     }
 
     const products = await prismadb.product.findMany({
@@ -123,6 +125,7 @@ export async function GET(
         createdAt: "desc",
       },
     });
+
     return NextResponse.json(products);
   } catch (error) {
     console.log("[PRODUCTS_GET]", error);
