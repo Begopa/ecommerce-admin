@@ -1,11 +1,12 @@
 "use client";
 
 import axios from "axios";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
-import toast from "react-hot-toast";
+import { useState } from "react";
+import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { toast } from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,16 +14,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import { Button } from "@/components/ui/button";
+import { AlertModal } from "@/components/modals/alert-modal";
 import { cn } from "@/lib/utils";
 import { className } from "postcss-selector-parser";
 import { ColorColumn } from "./columns";
-import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellActionProps {
   data: ColorColumn;
 }
+
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
@@ -31,20 +31,20 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Color Id copied to the clipboard");
+    toast.success("Color ID copied to clipboard.");
   };
 
-  const onDelete = async () => {
+  const onConfirm = async () => {
     try {
       setLoading(true);
       await axios.delete(`/api/${params.storeId}/colors/${data.id}`);
-      router.refresh();
       toast.success("Color deleted.");
+      router.refresh();
     } catch (error) {
       toast.error("Make sure you removed all products using this color first.");
     } finally {
-      setLoading(false);
       setOpen(false);
+      setLoading(false);
     }
   };
 
@@ -53,7 +53,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={onDelete}
+        onConfirm={onConfirm}
         loading={loading}
       />
       <DropdownMenu>
@@ -66,8 +66,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onClick={() => onCopy(data.id)}>
-            <Edit className="mr-2 h-4 w-4" />
-            Copy Id
+            <Copy className="mr-2 h-4 w-4" /> Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => router.push(`/${params.storeId}/colors/${data.id}`)}

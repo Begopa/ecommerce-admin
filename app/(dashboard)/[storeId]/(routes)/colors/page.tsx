@@ -5,7 +5,7 @@ import prismadb from "@/lib/prismadb";
 import { ColorClient } from "./components/client";
 import { ColorColumn } from "./components/columns";
 
-const ColorPage = async ({ params }: { params: { storeId: string } }) => {
+const ColorsPage = async ({ params }: { params: { storeId: string } }) => {
   const colors = await prismadb.color.findMany({
     where: {
       storeId: params.storeId,
@@ -19,7 +19,7 @@ const ColorPage = async ({ params }: { params: { storeId: string } }) => {
     id: item.id,
     name: item.name,
     value: item.value,
-    createdAt: format(item.createdAt, "MMM do, yyyy"),
+    createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
 
   return (
@@ -31,4 +31,4 @@ const ColorPage = async ({ params }: { params: { storeId: string } }) => {
   );
 };
 
-export default ColorPage;
+export default ColorsPage;
